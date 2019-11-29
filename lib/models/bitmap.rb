@@ -16,6 +16,12 @@ class Bitmap
     grid[[row, col]] = colour
   end
 
+  def display_current_image
+    grid
+      .group_by { |coord, _| coord.last }
+      .map { |_, row| row.to_h.values.join }
+  end
+
   private
 
   def initialize_grid

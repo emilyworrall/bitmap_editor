@@ -23,4 +23,16 @@ RSpec.describe Bitmap do
       expect(bitmap.grid[[1, 2]]).to eq("C")
     end
   end
+
+  describe "#display_current_image" do
+    it "returns array containing each row of colours" do
+      bitmap.colour_pixel(1, 1, "C")
+      bitmap.colour_pixel(1, 2, "C")
+      bitmap.colour_pixel(1, 3, "C")
+
+      expect(bitmap.display_current_image).to eq(
+        ["COO", "COO", "COO"]
+      )
+    end
+  end
 end

@@ -26,7 +26,7 @@ class BitmapEditor
         row, col, colour = args
         @bitmap.colour_pixel(row.to_i, col.to_i, colour)
       when "S"
-        puts "There is no image"
+        puts @bitmap.display_current_image
       end
     end
   end

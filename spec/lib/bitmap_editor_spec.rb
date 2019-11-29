@@ -51,7 +51,14 @@ RSpec.describe BitmapEditor do
 
     context "when first command is to create an image" do
       let(:lines) { ["I 3 3"] }
-      let(:bitmap) { instance_double("Bitmap", colour_pixel: true) }
+      let(:bitmap) {
+        instance_double(
+          "Bitmap",
+          colour_pixel: true,
+          display_current_image: current_image
+        )
+      }
+      let(:current_image) { ["OOO", "OOO", "OOO"] }
 
       before do
         allow(Bitmap).to receive(:new).and_return(bitmap)
@@ -71,6 +78,22 @@ RSpec.describe BitmapEditor do
           bitmap_editor.run(input_filename)
 
           expect(bitmap).to have_received(:colour_pixel).with(1, 2, "C")
+        end
+      end
+
+      describe "showing contents of current image" do
+        let(:lines) { ["I 3 3", "S"] }
+
+        it "calls Bitmap display_current_image method" do
+          bitmap_editor.run(input_filename)
+
+          expect(bitmap).to have_received(:display_current_image)
+        end
+
+        it "sends displayed Bitmap to STDOUT" do
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with(current_image)
         end
       end
     end
