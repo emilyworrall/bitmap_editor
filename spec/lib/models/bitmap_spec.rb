@@ -52,6 +52,17 @@ RSpec.describe Bitmap do
     end
   end
 
+  describe "#clear" do
+    it "sets all pixels to white" do
+      bitmap.colour_pixel([1, 2], "C")
+      expect(bitmap.grid[[1, 2]]).to eq("C")
+
+      bitmap.clear
+
+      expect(bitmap.grid.values.all?("O")).to eq(true)
+    end
+  end
+
   describe "#display_current_image" do
     it "returns array containing each row of colours" do
       bitmap.draw_vertical(1, 1, 3, "C")

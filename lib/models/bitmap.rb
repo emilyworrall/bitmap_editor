@@ -40,6 +40,10 @@ class Bitmap
       .map { |_, row| row.to_h.values.join }
   end
 
+  def clear
+    set_pixels_to_white(grid.keys)
+  end
+
   private
 
   def initialize_grid
@@ -51,6 +55,10 @@ class Bitmap
       end
     end
 
+    set_pixels_to_white(coordinates)
+  end
+
+  def set_pixels_to_white(coordinates)
     coordinates.each do |coordinate|
       grid[coordinate] = WHITE
     end
