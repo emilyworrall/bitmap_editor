@@ -6,7 +6,6 @@ RSpec.describe BitmapEditor do
 
   before do
     allow(STDOUT).to receive(:puts)
-    allow(Bitmap).to receive(:new).and_call_original
   end
 
   after do
@@ -51,12 +50,28 @@ RSpec.describe BitmapEditor do
     end
 
     context "when first command is to create an image" do
-      it "creates a new Bitmap" do
-        lines = ["I 3 3"]
+      let(:lines) { ["I 3 3"] }
+      let(:bitmap) { instance_double("Bitmap") }
+
+      before do
+        allow(Bitmap).to receive(:new).and_return(bitmap)
         create_file(lines)
+      end
+
+      it "creates a new Bitmap" do
         bitmap_editor.run(input_filename)
 
         expect(Bitmap).to have_received(:new).with(3, 3)
+      end
+
+      describe "editing a pixel on the bitmap" do
+        let(:lines) { ["I 3 3", "L 1 2 C"] }
+
+        it "colours the pixel with specified colour" do
+          bitmap_editor.run(input_filename)
+
+          expect(bitmap).to have_received(:colour_pixel).with(1, 2, "C")
+        end
       end
     end
   end
