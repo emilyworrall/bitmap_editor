@@ -1,3 +1,5 @@
+require_relative "models/bitmap"
+
 class BitmapEditor
   COMMANDS = ["I", "C", "L", "V", "H", "S"]
 
@@ -17,6 +19,9 @@ class BitmapEditor
       return puts "unrecognised command :(" unless COMMANDS.include?(command)
 
       case command
+      when "I"
+        cols, rows = args
+        Bitmap.new(rows.to_i, cols.to_i)
       when "S"
         puts "There is no image"
       end

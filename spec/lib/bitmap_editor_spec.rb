@@ -6,6 +6,7 @@ RSpec.describe BitmapEditor do
 
   before do
     allow(STDOUT).to receive(:puts)
+    allow(Bitmap).to receive(:new).and_call_original
   end
 
   after do
@@ -46,6 +47,16 @@ RSpec.describe BitmapEditor do
         bitmap_editor.run(input_filename)
 
         expect(STDOUT).to have_received(:puts).with("first command must be create")
+      end
+    end
+
+    context "when first command is to create an image" do
+      it "creates a new Bitmap" do
+        lines = ["I 3 3"]
+        create_file(lines)
+        bitmap_editor.run(input_filename)
+
+        expect(Bitmap).to have_received(:new).with(3, 3)
       end
     end
   end
