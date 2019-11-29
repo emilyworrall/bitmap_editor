@@ -31,11 +31,21 @@ RSpec.describe BitmapEditor do
 
     context "when file contains unrecognised command" do
       it "outputs error message" do
-        lines = ["P"]
+        lines = ["I", "P"]
         create_file(lines)
         bitmap_editor.run(input_filename)
 
         expect(STDOUT).to have_received(:puts).with("unrecognised command :(")
+      end
+    end
+
+    context "when first line in file isn't a create command" do
+      it "outputs error message" do
+        lines = ["P"]
+        create_file(lines)
+        bitmap_editor.run(input_filename)
+
+        expect(STDOUT).to have_received(:puts).with("first command must be create")
       end
     end
   end
