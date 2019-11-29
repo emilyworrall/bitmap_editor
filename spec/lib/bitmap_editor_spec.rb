@@ -51,7 +51,7 @@ RSpec.describe BitmapEditor do
 
     context "when first command is to create an image" do
       let(:lines) { ["I 3 3"] }
-      let(:bitmap) { instance_double("Bitmap") }
+      let(:bitmap) { instance_double("Bitmap", colour_pixel: true) }
 
       before do
         allow(Bitmap).to receive(:new).and_return(bitmap)
