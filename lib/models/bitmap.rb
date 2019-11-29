@@ -12,8 +12,8 @@ class Bitmap
   attr_reader :rows, :cols, :grid
   private :rows, :cols
 
-  def colour_pixel(row, col, colour)
-    grid[[row, col]] = colour
+  def colour_pixel(coordinate, colour)
+    grid[coordinate] = colour
   end
 
   def draw_vertical(col, start_row, end_row, colour)
@@ -21,7 +21,7 @@ class Bitmap
     selected_coordinates = rows.map { |row| [col, row] }
 
     selected_coordinates.each do |coord|
-      grid[coord] = colour
+      colour_pixel(coord, colour)
     end
   end
 
@@ -30,7 +30,7 @@ class Bitmap
     selected_coordinates = cols.map { |col| [col, row] }
 
     selected_coordinates.each do |coord|
-      grid[coord] = colour
+      colour_pixel(coord, colour)
     end
   end
 
