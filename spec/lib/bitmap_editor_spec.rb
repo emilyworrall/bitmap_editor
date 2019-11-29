@@ -56,6 +56,7 @@ RSpec.describe BitmapEditor do
           "Bitmap",
           colour_pixel: true,
           draw_vertical: true,
+          draw_horizontal: true,
           display_current_image: current_image
         )
       }
@@ -89,6 +90,16 @@ RSpec.describe BitmapEditor do
           bitmap_editor.run(input_filename)
 
           expect(bitmap).to have_received(:draw_vertical).with(1, 1, 3, "C")
+        end
+      end
+
+      describe "drawing a horizontal segment of colour on image" do
+        let(:lines) { ["I 3 3", "H 1 3 1 C"] }
+
+        it "calls Bitmap draw_horizontal method" do
+          bitmap_editor.run(input_filename)
+
+          expect(bitmap).to have_received(:draw_horizontal).with(1, 1, 3, "C")
         end
       end
 

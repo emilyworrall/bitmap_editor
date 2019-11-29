@@ -25,6 +25,15 @@ class Bitmap
     end
   end
 
+  def draw_horizontal(row, start_col, end_col, colour)
+    cols = (start_col..end_col).to_a
+    selected_coordinates = cols.map { |col| [col, row] }
+
+    selected_coordinates.each do |coord|
+      grid[coord] = colour
+    end
+  end
+
   def display_current_image
     grid
       .group_by { |coord, _| coord.last }

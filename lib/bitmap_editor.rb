@@ -28,6 +28,9 @@ class BitmapEditor
       when "V"
         col, start_row, end_row, colour = args
         @bitmap.draw_vertical(col.to_i, start_row.to_i, end_row.to_i, colour)
+      when "H"
+        start_col, end_col, row, colour = args
+        @bitmap.draw_horizontal(row.to_i, start_col.to_i, end_col.to_i, colour)
       when "S"
         puts @bitmap.display_current_image
       end

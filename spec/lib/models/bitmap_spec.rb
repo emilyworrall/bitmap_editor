@@ -38,6 +38,20 @@ RSpec.describe Bitmap do
     end
   end
 
+  describe "#draw_horizontal" do
+    it "colours a horizontal line in given row across specified columns" do
+      bitmap.draw_horizontal(1, 1, 3, "C")
+
+      expect(bitmap.grid).to eq(
+        {
+          [1, 1] => "C", [1, 2] => "O", [1, 3] => "O",
+          [2, 1] => "C", [2, 2] => "O", [2, 3] => "O",
+          [3, 1] => "C", [3, 2] => "O", [3, 3] => "O"
+        }
+      )
+    end
+  end
+
   describe "#display_current_image" do
     it "returns array containing each row of colours" do
       bitmap.draw_vertical(1, 1, 3, "C")
