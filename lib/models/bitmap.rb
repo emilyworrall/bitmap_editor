@@ -12,6 +12,10 @@ class Bitmap
   attr_reader :rows, :cols, :grid
   private :rows, :cols
 
+  def colour_pixel(row, col, colour)
+    grid[[row, col]] = colour
+  end
+
   private
 
   def initialize_grid

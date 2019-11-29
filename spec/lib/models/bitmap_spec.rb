@@ -15,4 +15,12 @@ RSpec.describe Bitmap do
       expect(bitmap.grid.values.all?("O")).to eq(true)
     end
   end
+
+  describe "#colour_pixel" do
+    it "colours pixel at given coordinate with given colour" do
+      bitmap.colour_pixel(1, 2, "C")
+
+      expect(bitmap.grid[[1, 2]]).to eq("C")
+    end
+  end
 end
