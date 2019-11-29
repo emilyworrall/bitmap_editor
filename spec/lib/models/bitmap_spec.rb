@@ -24,11 +24,23 @@ RSpec.describe Bitmap do
     end
   end
 
+  describe "#draw_vertical" do
+    it "colours a vertical line in given column across specified rows" do
+      bitmap.draw_vertical(1, 1, 3, "C")
+
+      expect(bitmap.grid).to eq(
+        {
+          [1, 1] => "C", [1, 2] => "C", [1, 3] => "C",
+          [2, 1] => "O", [2, 2] => "O", [2, 3] => "O",
+          [3, 1] => "O", [3, 2] => "O", [3, 3] => "O"
+        }
+      )
+    end
+  end
+
   describe "#display_current_image" do
     it "returns array containing each row of colours" do
-      bitmap.colour_pixel(1, 1, "C")
-      bitmap.colour_pixel(1, 2, "C")
-      bitmap.colour_pixel(1, 3, "C")
+      bitmap.draw_vertical(1, 1, 3, "C")
 
       expect(bitmap.display_current_image).to eq(
         ["COO", "COO", "COO"]

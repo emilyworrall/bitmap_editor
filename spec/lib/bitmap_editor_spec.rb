@@ -55,6 +55,7 @@ RSpec.describe BitmapEditor do
         instance_double(
           "Bitmap",
           colour_pixel: true,
+          draw_vertical: true,
           display_current_image: current_image
         )
       }
@@ -78,6 +79,16 @@ RSpec.describe BitmapEditor do
           bitmap_editor.run(input_filename)
 
           expect(bitmap).to have_received(:colour_pixel).with(1, 2, "C")
+        end
+      end
+
+      describe "drawing a vertical segment of colour on image" do
+        let(:lines) { ["I 3 3", "V 1 1 3 C"] }
+
+        it "calls Bitmap draw_vertical method" do
+          bitmap_editor.run(input_filename)
+
+          expect(bitmap).to have_received(:draw_vertical).with(1, 1, 3, "C")
         end
       end
 

@@ -16,6 +16,15 @@ class Bitmap
     grid[[row, col]] = colour
   end
 
+  def draw_vertical(col, start_row, end_row, colour)
+    rows = (start_row..end_row).to_a
+    selected_coordinates = rows.map { |row| [col, row] }
+
+    selected_coordinates.each do |coord|
+      grid[coord] = colour
+    end
+  end
+
   def display_current_image
     grid
       .group_by { |coord, _| coord.last }
