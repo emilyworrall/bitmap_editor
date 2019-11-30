@@ -31,7 +31,7 @@ RSpec.describe BitmapEditor do
 
     context "when file contains unrecognised command" do
       it "outputs error message" do
-        lines = ["I", "P"]
+        lines = ["I 1 1", "P"]
         create_file(lines)
         bitmap_editor.run(input_filename)
 
@@ -46,6 +46,18 @@ RSpec.describe BitmapEditor do
         bitmap_editor.run(input_filename)
 
         expect(STDOUT).to have_received(:puts).with("first command must be create")
+      end
+    end
+
+    context "when command has invalid number of arguments" do
+      it "outputs an error message" do
+        lines = ["I 3 3", "H 1"]
+        create_file(lines)
+        bitmap_editor.run(input_filename)
+
+        expect(STDOUT).to have_received(:puts).with(
+          "line 2: wrong number of arguments"
+        )
       end
     end
 
