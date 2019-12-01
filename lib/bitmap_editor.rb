@@ -21,7 +21,12 @@ class BitmapEditor
     end
 
     commands.rewind
+    execute_commands(commands)
+  end
 
+  private
+
+  def execute_commands(commands)
     commands.each_with_index do |line, line_num|
       begin
         command, *args = line.chomp.split
@@ -55,8 +60,6 @@ class BitmapEditor
       end
     end
   end
-
-  private
 
   def validate_and_parse_args(command, args)
     command_spec = COMMANDS_AND_ARG_SPEC[command]
