@@ -38,17 +38,13 @@ class BitmapEditor
 
         case command
         when "I"
-          cols, rows = command_args
-          @bitmap = Bitmap.new(rows, cols)
+          @bitmap = Bitmap.new(*command_args)
         when "L"
-          row, col, colour = command_args
-          @bitmap.colour_pixel([row, col], colour)
+          @bitmap.colour_pixel(*command_args)
         when "V"
-          col, start_row, end_row, colour = command_args
-          @bitmap.draw_vertical(col, start_row, end_row, colour)
+          @bitmap.draw_vertical(*command_args)
         when "H"
-          start_col, end_col, row, colour = command_args
-          @bitmap.draw_horizontal(row, start_col, end_col, colour)
+          @bitmap.draw_horizontal(*command_args)
         when "C"
           @bitmap.clear
         when "S"

@@ -130,7 +130,7 @@ RSpec.describe BitmapEditor do
         it "colours the pixel with specified colour" do
           bitmap_editor.run(input_filename)
 
-          expect(bitmap).to have_received(:colour_pixel).with([1, 2], "C")
+          expect(bitmap).to have_received(:colour_pixel).with(1, 2, "C")
         end
       end
 
@@ -150,7 +150,7 @@ RSpec.describe BitmapEditor do
         it "calls Bitmap draw_horizontal method" do
           bitmap_editor.run(input_filename)
 
-          expect(bitmap).to have_received(:draw_horizontal).with(1, 1, 3, "C")
+          expect(bitmap).to have_received(:draw_horizontal).with(1, 3, 1, "C")
         end
       end
 

@@ -1,19 +1,19 @@
 class Bitmap
   WHITE = "O".freeze
 
-  def initialize(rows, cols)
-    @rows = rows
+  def initialize(cols, rows)
     @cols = cols
+    @rows = rows
     @grid = {}
 
     initialize_grid
   end
 
-  attr_reader :rows, :cols, :grid
-  private :rows, :cols
+  attr_reader :cols, :rows, :grid
+  private :cols, :rows
 
-  def colour_pixel(coordinate, colour)
-    grid[coordinate] = colour
+  def colour_pixel(col, row, colour)
+    set_colour([col, row], colour)
   end
 
   def draw_vertical(col, start_row, end_row, colour)
@@ -23,7 +23,7 @@ class Bitmap
     set_pixels_to_colour(selected_coordinates, colour)
   end
 
-  def draw_horizontal(row, start_col, end_col, colour)
+  def draw_horizontal(start_col, end_col, row, colour)
     cols = (start_col..end_col).to_a
     selected_coordinates = cols.map { |col| [col, row] }
 
@@ -56,7 +56,11 @@ class Bitmap
 
   def set_pixels_to_colour(coordinates, colour)
     coordinates.each do |coord|
-      colour_pixel(coord, colour)
+      set_colour(coord, colour)
     end
+  end
+
+  def set_colour(coordinate, colour)
+    grid[coordinate] = colour
   end
 end

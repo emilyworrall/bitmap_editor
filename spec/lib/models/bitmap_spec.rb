@@ -18,7 +18,7 @@ RSpec.describe Bitmap do
 
   describe "#colour_pixel" do
     it "colours pixel at given coordinate with given colour" do
-      bitmap.colour_pixel([1, 2], "C")
+      bitmap.colour_pixel(1, 2, "C")
 
       expect(bitmap.grid[[1, 2]]).to eq("C")
     end
@@ -40,7 +40,7 @@ RSpec.describe Bitmap do
 
   describe "#draw_horizontal" do
     it "colours a horizontal line in given row across specified columns" do
-      bitmap.draw_horizontal(1, 1, 3, "C")
+      bitmap.draw_horizontal(1, 3, 1, "C")
 
       expect(bitmap.grid).to eq(
         {
@@ -54,7 +54,7 @@ RSpec.describe Bitmap do
 
   describe "#clear" do
     it "sets all pixels to white" do
-      bitmap.colour_pixel([1, 2], "C")
+      bitmap.colour_pixel(1, 2, "C")
       expect(bitmap.grid[[1, 2]]).to eq("C")
 
       bitmap.clear
