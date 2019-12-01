@@ -38,6 +38,10 @@ class BitmapEditor
 
         case command
         when "I"
+          if @bitmap
+            return puts error_message(line_num, "bitmap image already exists")
+          end
+
           @bitmap = Bitmap.new(*command_args)
         when "L"
           @bitmap.colour_pixel(*command_args)

@@ -99,6 +99,18 @@ RSpec.describe BitmapEditor do
           )
         end
       end
+
+      context "when a bitmap image already exists" do
+        let(:commands) { ["I 3 3", "I 3 4"] }
+
+        it "outputs an error message" do
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with(
+            "line 2: bitmap image already exists"
+          )
+        end
+      end
     end
 
     describe "valid user input" do
