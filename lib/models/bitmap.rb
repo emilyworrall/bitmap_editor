@@ -18,14 +18,14 @@ class Bitmap
   end
 
   def draw_vertical(col, start_row, end_row, colour)
-    rows = (start_row..end_row).to_a
+    rows = find_range(start_row, end_row)
     selected_coordinates = rows.map { |row| [col, row] }
 
     set_pixels_to_colour(selected_coordinates, colour)
   end
 
   def draw_horizontal(start_col, end_col, row, colour)
-    cols = (start_col..end_col).to_a
+    cols = find_range(start_col, end_col)
     selected_coordinates = cols.map { |col| [col, row] }
 
     set_pixels_to_colour(selected_coordinates, colour)
@@ -69,5 +69,13 @@ class Bitmap
     end
 
     grid[coordinate] = colour
+  end
+
+  def find_range(num_one, num_two)
+    if num_one < num_two
+      (num_one..num_two).to_a
+    else
+      (num_two..num_one).to_a
+    end
   end
 end
