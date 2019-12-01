@@ -72,4 +72,14 @@ RSpec.describe Bitmap do
       )
     end
   end
+
+  context "when trying to colour a coordinate outside of the grid" do
+    it "raises an error" do
+      expect {
+        bitmap.draw_vertical(1, 1, 6, "C")
+      }.to raise_error(
+        Bitmap::OutOfBoundsError, "trying to colour outside of bitmap"
+      )
+    end
+  end
 end

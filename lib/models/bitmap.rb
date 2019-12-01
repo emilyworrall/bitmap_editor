@@ -1,4 +1,5 @@
 class Bitmap
+  class OutOfBoundsError < StandardError; end
   WHITE = "O".freeze
 
   def initialize(cols, rows)
@@ -51,7 +52,9 @@ class Bitmap
       end
     end
 
-    set_pixels_to_colour(coordinates, WHITE)
+    coordinates.each do |coord|
+      grid[coord] = WHITE
+    end
   end
 
   def set_pixels_to_colour(coordinates, colour)
@@ -61,6 +64,10 @@ class Bitmap
   end
 
   def set_colour(coordinate, colour)
+    unless grid.include?(coordinate)
+      raise OutOfBoundsError.new("trying to colour outside of bitmap")
+    end
+
     grid[coordinate] = colour
   end
 end

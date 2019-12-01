@@ -4,10 +4,23 @@ require "bitmap_editor"
 RSpec.describe BitmapEditor do
   subject(:bitmap_editor) { BitmapEditor.new }
   let(:commands) { [] }
+  let(:bitmap) {
+    instance_double(
+      "Bitmap",
+      colour_pixel: true,
+      draw_vertical: true,
+      draw_horizontal: true,
+      clear: true,
+      display_current_image: current_image
+    )
+  }
+  let(:current_image) { ["OOO", "OOO", "OOO"] }
 
   before do
     allow(STDOUT).to receive(:puts)
     create_file(commands)
+
+    allow(Bitmap).to receive(:new).and_return(bitmap)
   end
 
   after do
@@ -111,25 +124,26 @@ RSpec.describe BitmapEditor do
           )
         end
       end
+
+      context "when a command includes a coordinate out of bitmap range" do
+        let(:commands) { ["I 3 3", "L 3 4 C"] }
+        before do
+          allow(bitmap).to receive(:colour_pixel).and_raise(
+            Bitmap::OutOfBoundsError.new("out of bounds")
+          )
+        end
+
+        it "outputs an error message" do
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with(
+            "line 2: out of bounds"
+          )
+        end
+      end
     end
 
     describe "valid user input" do
-      let(:bitmap) {
-        instance_double(
-          "Bitmap",
-          colour_pixel: true,
-          draw_vertical: true,
-          draw_horizontal: true,
-          clear: true,
-          display_current_image: current_image
-        )
-      }
-      let(:current_image) { ["OOO", "OOO", "OOO"] }
-
-      before do
-        allow(Bitmap).to receive(:new).and_return(bitmap)
-      end
-
       describe "creating a bitmap" do
         let(:commands) { ["I 3 3"] }
 

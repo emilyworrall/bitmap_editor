@@ -55,7 +55,7 @@ class BitmapEditor
           puts @bitmap.display_current_image
         end
 
-      rescue InvalidCommandError => e
+      rescue InvalidCommandError, Bitmap::OutOfBoundsError => e
         return puts error_message(line_num, e.message)
       end
     end
