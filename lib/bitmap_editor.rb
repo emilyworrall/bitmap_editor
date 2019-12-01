@@ -31,7 +31,7 @@ class BitmapEditor
       begin
         command, *args = line.chomp.split
         unless COMMANDS_AND_ARG_SPEC.keys.include?(command)
-          return puts "line #{line_num + 1}: unrecognised command"
+          return puts error_message(line_num, "unrecognised command")
         end
 
         command_args = validate_and_parse_args(command, args)
@@ -52,7 +52,7 @@ class BitmapEditor
         end
 
       rescue InvalidCommandError => e
-        return puts "line #{line_num + 1}: #{e.message}"
+        return puts error_message(line_num, e.message)
       end
     end
   end
@@ -88,5 +88,9 @@ class BitmapEditor
         arg
       end
     }
+  end
+
+  def error_message(line_number, message)
+    "line #{line_number + 1}: #{message}"
   end
 end
