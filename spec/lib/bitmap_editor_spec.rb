@@ -3,9 +3,11 @@ require "bitmap_editor"
 
 RSpec.describe BitmapEditor do
   subject(:bitmap_editor) { BitmapEditor.new }
+  let(:commands) { [] }
 
   before do
     allow(STDOUT).to receive(:puts)
+    create_file(commands)
   end
 
   after do
@@ -31,9 +33,9 @@ RSpec.describe BitmapEditor do
       end
 
       context "when file contains unrecognised command" do
+        let(:commands) { ["I 1 1", "P"] }
+
         it "outputs error message" do
-          lines = ["I 1 1", "P"]
-          create_file(lines)
           bitmap_editor.run(input_filename)
 
           expect(STDOUT).to have_received(:puts).with("line 2: unrecognised command")
@@ -41,9 +43,9 @@ RSpec.describe BitmapEditor do
       end
 
       context "when first line in file isn't a create command" do
+        let(:commands) { ["P"] }
+
         it "outputs error message" do
-          lines = ["P"]
-          create_file(lines)
           bitmap_editor.run(input_filename)
 
           expect(STDOUT).to have_received(:puts).with("first command must be create")
@@ -51,9 +53,9 @@ RSpec.describe BitmapEditor do
       end
 
       context "when a number argument is not between 1 and 250" do
+        let(:commands) { ["I 3 3", "L 1 560 C"] }
+
         it "outputs an error message" do
-          lines = ["I 3 3", "L 1 560 C"]
-          create_file(lines)
           bitmap_editor.run(input_filename)
 
           expect(STDOUT).to have_received(:puts).with(
@@ -63,9 +65,9 @@ RSpec.describe BitmapEditor do
       end
 
       context "when colour and number args are in the wrong position" do
+        let(:commands) { ["I 3 3", "L C 1 1"] }
+
         it "outputs an error message" do
-          lines = ["I 3 3", "L C 1 1"]
-          create_file(lines)
           bitmap_editor.run(input_filename)
 
           expect(STDOUT).to have_received(:puts).with(
@@ -75,9 +77,9 @@ RSpec.describe BitmapEditor do
       end
 
       context "when command has invalid number of arguments" do
+        let(:commands) { ["I 3 3", "H 1"] }
+
         it "outputs an error message" do
-          lines = ["I 3 3", "H 1"]
-          create_file(lines)
           bitmap_editor.run(input_filename)
 
           expect(STDOUT).to have_received(:puts).with(
@@ -87,9 +89,9 @@ RSpec.describe BitmapEditor do
       end
 
       context "when colour argument isn't a capital letter" do
+        let(:commands) { ["I 3 3", "S", "H 1 1 2 f"] }
+
         it "outputs an error message" do
-          lines = ["I 3 3", "S", "H 1 1 2 f"]
-          create_file(lines)
           bitmap_editor.run(input_filename)
 
           expect(STDOUT).to have_received(:puts).with(
@@ -100,7 +102,6 @@ RSpec.describe BitmapEditor do
     end
 
     describe "valid user input" do
-      let(:lines) { ["I 3 3"] }
       let(:bitmap) {
         instance_double(
           "Bitmap",
@@ -115,17 +116,20 @@ RSpec.describe BitmapEditor do
 
       before do
         allow(Bitmap).to receive(:new).and_return(bitmap)
-        create_file(lines)
       end
 
-      it "creates a new Bitmap" do
-        bitmap_editor.run(input_filename)
+      describe "creating a bitmap" do
+        let(:commands) { ["I 3 3"] }
 
-        expect(Bitmap).to have_received(:new).with(3, 3)
+        it "creates a new Bitmap" do
+          bitmap_editor.run(input_filename)
+
+          expect(Bitmap).to have_received(:new).with(3, 3)
+        end
       end
 
       describe "editing a pixel on the bitmap" do
-        let(:lines) { ["I 3 3", "L 1 2 C"] }
+        let(:commands) { ["I 3 3", "L 1 2 C"] }
 
         it "colours the pixel with specified colour" do
           bitmap_editor.run(input_filename)
@@ -135,7 +139,7 @@ RSpec.describe BitmapEditor do
       end
 
       describe "drawing a vertical segment of colour on image" do
-        let(:lines) { ["I 3 3", "V 1 1 3 C"] }
+        let(:commands) { ["I 3 3", "V 1 1 3 C"] }
 
         it "calls Bitmap draw_vertical method" do
           bitmap_editor.run(input_filename)
@@ -145,7 +149,7 @@ RSpec.describe BitmapEditor do
       end
 
       describe "drawing a horizontal segment of colour on image" do
-        let(:lines) { ["I 3 3", "H 1 3 1 C"] }
+        let(:commands) { ["I 3 3", "H 1 3 1 C"] }
 
         it "calls Bitmap draw_horizontal method" do
           bitmap_editor.run(input_filename)
@@ -155,7 +159,7 @@ RSpec.describe BitmapEditor do
       end
 
       describe "clearing the image" do
-        let(:lines) { ["I 3 3", "H 1 3 1 C", "C"] }
+        let(:commands) { ["I 3 3", "H 1 3 1 C", "C"] }
 
         it "calls Bitmap clear method" do
           bitmap_editor.run(input_filename)
@@ -165,7 +169,7 @@ RSpec.describe BitmapEditor do
       end
 
       describe "showing contents of current image" do
-        let(:lines) { ["I 3 3", "S"] }
+        let(:commands) { ["I 3 3", "S"] }
 
         it "calls Bitmap display_current_image method" do
           bitmap_editor.run(input_filename)
