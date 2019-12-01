@@ -20,18 +20,14 @@ class Bitmap
     rows = (start_row..end_row).to_a
     selected_coordinates = rows.map { |row| [col, row] }
 
-    selected_coordinates.each do |coord|
-      colour_pixel(coord, colour)
-    end
+    set_pixels_to_colour(selected_coordinates, colour)
   end
 
   def draw_horizontal(row, start_col, end_col, colour)
     cols = (start_col..end_col).to_a
     selected_coordinates = cols.map { |col| [col, row] }
 
-    selected_coordinates.each do |coord|
-      colour_pixel(coord, colour)
-    end
+    set_pixels_to_colour(selected_coordinates, colour)
   end
 
   def display_current_image
@@ -41,7 +37,7 @@ class Bitmap
   end
 
   def clear
-    set_pixels_to_white(grid.keys)
+    set_pixels_to_colour(grid.keys, WHITE)
   end
 
   private
@@ -55,12 +51,12 @@ class Bitmap
       end
     end
 
-    set_pixels_to_white(coordinates)
+    set_pixels_to_colour(coordinates, WHITE)
   end
 
-  def set_pixels_to_white(coordinates)
-    coordinates.each do |coordinate|
-      grid[coordinate] = WHITE
+  def set_pixels_to_colour(coordinates, colour)
+    coordinates.each do |coord|
+      colour_pixel(coord, colour)
     end
   end
 end
