@@ -18,6 +18,8 @@ RSpec.describe "Creating a bitmap" do
         [
           "I 5 6",
           "L 1 3 A",
+          "C",
+          "L 1 3 B",
           "V 2 3 6 W",
           "H 3 5 2 Z",
           "S"
@@ -29,7 +31,7 @@ RSpec.describe "Creating a bitmap" do
         [
           "OOOOO",
           "OOZZZ",
-          "AWOOO",
+          "BWOOO",
           "OWOOO",
           "OWOOO",
           "OWOOO"
