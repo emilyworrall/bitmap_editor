@@ -13,91 +13,93 @@ RSpec.describe BitmapEditor do
   end
 
   describe "#run" do
-    context "when no file is provided" do
-      it "outputs error message" do
-        bitmap_editor.run(nil)
+    describe "invalid user input" do
+      context "when no file is provided" do
+        it "outputs error message" do
+          bitmap_editor.run(nil)
 
-        expect(STDOUT).to have_received(:puts).with("please provide correct file")
+          expect(STDOUT).to have_received(:puts).with("please provide correct file")
+        end
+      end
+
+      context "when filename is provided but doesn't exist" do
+        it "outputs error message" do
+          bitmap_editor.run("examples/random.txt")
+
+          expect(STDOUT).to have_received(:puts).with("please provide correct file")
+        end
+      end
+
+      context "when file contains unrecognised command" do
+        it "outputs error message" do
+          lines = ["I 1 1", "P"]
+          create_file(lines)
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with("line 2: unrecognised command")
+        end
+      end
+
+      context "when first line in file isn't a create command" do
+        it "outputs error message" do
+          lines = ["P"]
+          create_file(lines)
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with("first command must be create")
+        end
+      end
+
+      context "when a number argument is not between 1 and 250" do
+        it "outputs an error message" do
+          lines = ["I 3 3", "L 1 560 C"]
+          create_file(lines)
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with(
+            "line 2: numbers must be between 1 and 250"
+          )
+        end
+      end
+
+      context "when colour and number args are in the wrong position" do
+        it "outputs an error message" do
+          lines = ["I 3 3", "L C 1 1"]
+          create_file(lines)
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with(
+            "line 2: argument 0 must be number"
+          )
+        end
+      end
+
+      context "when command has invalid number of arguments" do
+        it "outputs an error message" do
+          lines = ["I 3 3", "H 1"]
+          create_file(lines)
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with(
+            "line 2: wrong number of arguments, requires 4"
+          )
+        end
+      end
+
+      context "when colour argument isn't a capital letter" do
+        it "outputs an error message" do
+          lines = ["I 3 3", "S", "H 1 1 2 f"]
+          create_file(lines)
+          bitmap_editor.run(input_filename)
+
+          expect(STDOUT).to have_received(:puts).with(
+            "line 3: colour must be capital letter"
+          )
+        end
       end
     end
 
-    context "when filename is provided but doesn't exist" do
-      it "outputs error message" do
-        bitmap_editor.run("examples/random.txt")
-
-        expect(STDOUT).to have_received(:puts).with("please provide correct file")
-      end
-    end
-
-    context "when file contains unrecognised command" do
-      it "outputs error message" do
-        lines = ["I 1 1", "P"]
-        create_file(lines)
-        bitmap_editor.run(input_filename)
-
-        expect(STDOUT).to have_received(:puts).with("line 2: unrecognised command")
-      end
-    end
-
-    context "when first line in file isn't a create command" do
-      it "outputs error message" do
-        lines = ["P"]
-        create_file(lines)
-        bitmap_editor.run(input_filename)
-
-        expect(STDOUT).to have_received(:puts).with("first command must be create")
-      end
-    end
-
-    context "when a number argument is not between 1 and 250" do
-      it "outputs an error message" do
-        lines = ["I 3 3", "L 1 560 C"]
-        create_file(lines)
-        bitmap_editor.run(input_filename)
-
-        expect(STDOUT).to have_received(:puts).with(
-          "line 2: numbers must be between 1 and 250"
-        )
-      end
-    end
-
-    context "when colour and number args are in the wrong position" do
-      it "outputs an error message" do
-        lines = ["I 3 3", "L C 1 1"]
-        create_file(lines)
-        bitmap_editor.run(input_filename)
-
-        expect(STDOUT).to have_received(:puts).with(
-          "line 2: argument 0 must be number"
-        )
-      end
-    end
-
-    context "when command has invalid number of arguments" do
-      it "outputs an error message" do
-        lines = ["I 3 3", "H 1"]
-        create_file(lines)
-        bitmap_editor.run(input_filename)
-
-        expect(STDOUT).to have_received(:puts).with(
-          "line 2: wrong number of arguments, requires 4"
-        )
-      end
-    end
-
-    context "when colour argument isn't a capital letter" do
-      it "outputs an error message" do
-        lines = ["I 3 3", "S", "H 1 1 2 f"]
-        create_file(lines)
-        bitmap_editor.run(input_filename)
-
-        expect(STDOUT).to have_received(:puts).with(
-          "line 3: colour must be capital letter"
-        )
-      end
-    end
-
-    context "when first command is to create an image" do
+    describe "valid user input" do
       let(:lines) { ["I 3 3"] }
       let(:bitmap) {
         instance_double(
